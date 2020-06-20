@@ -1,0 +1,48 @@
+﻿@model MusicStore.WebUI.Models.Account
+
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<div class="cart-table-area section-padding-100">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                <div class="checkout_details_area mt-50 clearfix">
+
+                    <div class="cart-title">
+                        <h2>Register</h2>
+                    </div>
+
+                   @using (Html.BeginForm("Register" , "Account", FormMethod.Post)) { 
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label><strong>UserName</strong></label>
+                            @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label><strong>Password</strong></label>
+                            @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label><strong>Email</strong></label>
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                        </div>
+
+                       
+                        <div class="col-12 mb-3">
+                            <div class="cart-btn mt-100">
+                                <input type="submit" class="btn amado-btn w-100" value="Register">
+                            </div>
+                        </div>
+
+                    </div>
+                    }
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,409 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="FinalMusicStoreModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Albums">
+          <Key>
+            <PropertyRef Name="AlbumID" />
+          </Key>
+          <Property Name="AlbumID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="16" Scale="2" Nullable="false" />
+          <Property Name="GoogleRate" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="ArtistID" Type="int" Nullable="false" />
+          <Property Name="GenreID" Type="int" Nullable="false" />
+          <Property Name="PhotoNr1" Type="varchar" MaxLength="255" />
+          <Property Name="PhotoNr2" Type="nchar" MaxLength="255" />
+          <Property Name="PhotoNr3" Type="nchar" MaxLength="255" />
+          <Property Name="PhotoNr4" Type="nchar" MaxLength="255" />
+          <Property Name="Description" Type="ntext" />
+        </EntityType>
+        <EntityType Name="Artists">
+          <Key>
+            <PropertyRef Name="ArtistID" />
+          </Key>
+          <Property Name="ArtistID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="text" Nullable="false" />
+          <Property Name="GoogleRate" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="Photo" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Genre">
+          <Key>
+            <PropertyRef Name="GenreID" />
+          </Key>
+          <Property Name="GenreID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderDetails">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="AlbumID" />
+          </Key>
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="AlbumID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FkAlbumID">
+          <End Role="Albums" Type="Self.Albums" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Albums">
+              <PropertyRef Name="AlbumID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="AlbumID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FkArtistID">
+          <End Role="Artists" Type="Self.Artists" Multiplicity="1" />
+          <End Role="Albums" Type="Self.Albums" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artists">
+              <PropertyRef Name="ArtistID" />
+            </Principal>
+            <Dependent Role="Albums">
+              <PropertyRef Name="ArtistID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FkGenreID">
+          <End Role="Genre" Type="Self.Genre" Multiplicity="1" />
+          <End Role="Albums" Type="Self.Albums" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genre">
+              <PropertyRef Name="GenreID" />
+            </Principal>
+            <Dependent Role="Albums">
+              <PropertyRef Name="GenreID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FkOrderID">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FkUserID">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FinalMusicStoreModelStoreContainer">
+          <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Albums" EntityType="Self.Albums" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Artists" EntityType="Self.Artists" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Genre" EntityType="Self.Genre" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FkAlbumID" Association="Self.FkAlbumID">
+            <End Role="Albums" EntitySet="Albums" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FkArtistID" Association="Self.FkArtistID">
+            <End Role="Artists" EntitySet="Artists" />
+            <End Role="Albums" EntitySet="Albums" />
+          </AssociationSet>
+          <AssociationSet Name="FkGenreID" Association="Self.FkGenreID">
+            <End Role="Genre" EntitySet="Genre" />
+            <End Role="Albums" EntitySet="Albums" />
+          </AssociationSet>
+          <AssociationSet Name="FkOrderID" Association="Self.FkOrderID">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FkUserID" Association="Self.FkUserID">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FinalMusicStoreModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FkUserID" FromRole="Account" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Album">
+          <Key>
+            <PropertyRef Name="AlbumID" />
+          </Key>
+          <Property Name="AlbumID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="16" Scale="2" Nullable="false" />
+          <Property Name="GoogleRate" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="ArtistID" Type="Int32" Nullable="false" />
+          <Property Name="GenreID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FkAlbumID" FromRole="Albums" ToRole="OrderDetails" />
+          <NavigationProperty Name="Artist" Relationship="Self.FkArtistID" FromRole="Albums" ToRole="Artists" />
+          <NavigationProperty Name="Genre" Relationship="Self.FkGenreID" FromRole="Albums" ToRole="Genre" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhotoNr1" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PhotoNr2" Type="String" MaxLength="255" FixedLength="true" Unicode="true" />
+          <Property Name="PhotoNr3" Type="String" MaxLength="255" FixedLength="true" Unicode="true" />
+          <Property Name="PhotoNr4" Type="String" MaxLength="255" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Artist">
+          <Key>
+            <PropertyRef Name="ArtistID" />
+          </Key>
+          <Property Name="ArtistID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="GoogleRate" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="Photo" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Albums" Relationship="Self.FkArtistID" FromRole="Artists" ToRole="Albums" />
+        </EntityType>
+        <EntityType Name="Genre">
+          <Key>
+            <PropertyRef Name="GenreID" />
+          </Key>
+          <Property Name="GenreID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Albums" Relationship="Self.FkGenreID" FromRole="Genre" ToRole="Albums" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="AlbumID" />
+          </Key>
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="AlbumID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Album" Relationship="Self.FkAlbumID" FromRole="OrderDetails" ToRole="Albums" />
+          <NavigationProperty Name="Order" Relationship="Self.FkOrderID" FromRole="OrderDetails" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="Self.FkUserID" FromRole="Orders" ToRole="Account" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FkOrderID" FromRole="Orders" ToRole="OrderDetails" />
+        </EntityType>
+        <Association Name="FkUserID">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FkAlbumID">
+          <End Role="Albums" Type="Self.Album" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Albums">
+              <PropertyRef Name="AlbumID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="AlbumID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FkArtistID">
+          <End Role="Artists" Type="Self.Artist" Multiplicity="1" />
+          <End Role="Albums" Type="Self.Album" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artists">
+              <PropertyRef Name="ArtistID" />
+            </Principal>
+            <Dependent Role="Albums">
+              <PropertyRef Name="ArtistID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FkGenreID">
+          <End Role="Genre" Type="Self.Genre" Multiplicity="1" />
+          <End Role="Albums" Type="Self.Album" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genre">
+              <PropertyRef Name="GenreID" />
+            </Principal>
+            <Dependent Role="Albums">
+              <PropertyRef Name="GenreID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FkOrderID">
+          <End Role="Orders" Type="Self.Order" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FinalMusicStoreEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts" EntityType="Self.Account" />
+          <EntitySet Name="Albums" EntityType="Self.Album" />
+          <EntitySet Name="Artists" EntityType="Self.Artist" />
+          <EntitySet Name="Genres" EntityType="Self.Genre" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
+          <AssociationSet Name="FkUserID" Association="Self.FkUserID">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FkAlbumID" Association="Self.FkAlbumID">
+            <End Role="Albums" EntitySet="Albums" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FkArtistID" Association="Self.FkArtistID">
+            <End Role="Artists" EntitySet="Artists" />
+            <End Role="Albums" EntitySet="Albums" />
+          </AssociationSet>
+          <AssociationSet Name="FkGenreID" Association="Self.FkGenreID">
+            <End Role="Genre" EntitySet="Genres" />
+            <End Role="Albums" EntitySet="Albums" />
+          </AssociationSet>
+          <AssociationSet Name="FkOrderID" Association="Self.FkOrderID">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FinalMusicStoreModelStoreContainer" CdmEntityContainer="FinalMusicStoreEntities">
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="FinalMusicStoreModel.Account">
+              <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Albums">
+            <EntityTypeMapping TypeName="FinalMusicStoreModel.Album">
+              <MappingFragment StoreEntitySet="Albums">
+                <ScalarProperty Name="PhotoNr4" ColumnName="PhotoNr4" />
+                <ScalarProperty Name="PhotoNr3" ColumnName="PhotoNr3" />
+                <ScalarProperty Name="PhotoNr2" ColumnName="PhotoNr2" />
+                <ScalarProperty Name="PhotoNr1" ColumnName="PhotoNr1" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="GoogleRate" ColumnName="GoogleRate" />
+                <ScalarProperty Name="ArtistID" ColumnName="ArtistID" />
+                <ScalarProperty Name="GenreID" ColumnName="GenreID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Artists">
+            <EntityTypeMapping TypeName="FinalMusicStoreModel.Artist">
+              <MappingFragment StoreEntitySet="Artists">
+                <ScalarProperty Name="ArtistID" ColumnName="ArtistID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="GoogleRate" ColumnName="GoogleRate" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Genres">
+            <EntityTypeMapping TypeName="FinalMusicStoreModel.Genre">
+              <MappingFragment StoreEntitySet="Genre">
+                <ScalarProperty Name="GenreID" ColumnName="GenreID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderDetails">
+            <EntityTypeMapping TypeName="FinalMusicStoreModel.OrderDetail">
+              <MappingFragment StoreEntitySet="OrderDetails">
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="FinalMusicStoreModel.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

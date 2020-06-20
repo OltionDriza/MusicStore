@@ -1,0 +1,104 @@
+﻿@using MusicStore.WebUI.Models;
+@{
+    ViewBag.Title = "Cart";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<div class="cart-table-area section-padding-100">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                <div class="cart-title mt-50">
+                    <h2>Shopping Cart</h2>
+                </div>
+
+                <div class="cart-table clearfix">
+                    <table class="table table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Photo</th>
+                                <th>Title</th>
+                                <th>Price</th>
+                                <th>Value</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          
+                            @{ 
+                                List<Item> cart = (List<Item>)Session["cart"];
+                            }
+                            @if (Session["cart"] != null) {
+                                foreach (var item in cart)
+                                {
+                            <tr>
+                                <td class="cart_product_img">
+                                    <a href="@Url.Action("AlbumDetails", "Albums", new { id = item.Album.AlbumID })"><img src="~/Content/Photo/@item.Album.PhotoNr1" alt="Product"></a>
+                                </td>
+                                <td class="cart_product_desc">
+                                    <h5>@item.Album.Title</h5>
+                                </td>
+                                <td class="price">
+                                    <span>@item.Album.Price</span>
+                                </td>
+                                <td class="price">
+                                    <span>@item.Quantity * @item.Album.Price = @(item.Quantity * item.Album.Price)$</span>
+                                </td>
+                                <td class="price">
+                                    <a href="@Url.Action("Delete", "Cart", new { idAlbum = item.Album.AlbumID })">Delete</a>
+                                </td>
+                            </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="cart-summary">
+                    @{
+                        decimal s = 0;
+                        if (Session["cart"] != null)
+                        {
+                            s = cart.Sum(i => i.Quantity * i.Album.Price);
+                        }
+
+                    }
+                    <h5>Cart Total</h5>
+                    <ul class="summary-table">
+                        <li><span>total:</span> <span>@s$</span></li>
+                        <li><span>delivery:</span> <span>Free</span></li>
+                    </ul>
+
+                    <div class="cart-btn mt-100">
+                        <a href="@Url.Action("Genre", "Home")" class="btn amado-btn w-100">Continue Shopping</a>
+                        <br />
+                        <br />
+                        
+                      
+                        <input type="button" onclick="location.href='@Url.Action("CheckoutAndShipping", "Cart")'"; id="checkout_button" class="btn amado-btn w-100" value="Checkout"
+                            @{
+                                decimal nrItems = 0;
+
+                                if (Session["cart"] != null)
+                                {
+
+                                    nrItems = cart.Sum(i => i.Quantity);
+                                }
+                                if(nrItems == 0)
+                                {
+                                    { 
+                                     @:disabled="disabled" 
+                                    }
+                                }
+                             }
+
+                           >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

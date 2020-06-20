@@ -1,0 +1,78 @@
+﻿@model MusicStore.WebUI.Models.ShippingDetails
+@using MusicStore.WebUI.Models
+@using MusicStore.WebUI.Repository
+@{
+    ViewBag.Title = "Checkout";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<div class="cart-table-area section-padding-100">
+    <div class="container-fluid">
+        @using (Html.BeginForm("Checkout", "Cart"))
+        {
+            @Html.ValidationSummary()
+            <div class="row">
+                <div class="col-12 col-lg-8">
+                    <div class="checkout_details_area mt-50 clearfix">
+
+                        <div class="cart-title">
+                            <h2>Checkout</h2>
+                        </div>
+
+
+
+                        <div class="row">
+
+                            <div class="col-12 mb-3">
+                                <label>Name:</label>
+                                @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+                            </div>
+
+                            @foreach (var property in ViewData.ModelMetadata.Properties)
+                            {
+                                if (property.PropertyName != "Name" && property.PropertyName != "GiftWrap")
+                                {
+                                    <div class="col-12 mb-3">
+                                        <label>@(property.DisplayName ?? property.PropertyName)</label>
+                                        @Html.TextBox(property.PropertyName, null, new { @class = "form-control" })
+                                    </div>
+                                }
+                            }
+
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="cart-summary">
+                        <h5>Cart Total</h5>
+                        <ul class="summary-table">
+                            @{
+                                List<Item> cart = (List<Item>)Session["cart"];
+                                decimal s = 0;
+                                if (Session["cart"] != null)
+                                {
+                                    s = cart.Sum(i => i.Quantity * i.Album.Price);
+                                }
+                            }
+
+                            <li><span>total:</span> <span>@s$</span></li>
+                            <li><span>delivery:</span> <span>Free</span></li>
+
+                        </ul>
+
+
+
+                        <div class="cart-btn mt-100">
+                            <input class="btn btn-primary" type="submit" value="Complete order" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    
+</div>
+
